@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #Global Variable
-SYSTEM_NAME="分布式业务线监控平台"
+SYSTEM_NAME="网站监控平台"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -45,17 +45,16 @@ DOWN_APEED_YMAX=8388608
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = []
-
 INTERNAL_IPS = ('127.0.0.1','192.168.50.102',)
-
+#MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'webservermonitor',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'kylin',                  # Not used with sqlite3.
-        'HOST': '1.1.1.1',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'kylinkylin',                  # Not used with sqlite3.
+        'HOST': '180.76.153.58',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }

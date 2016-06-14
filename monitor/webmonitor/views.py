@@ -2,7 +2,9 @@
 
 import os,time
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response,HttpResponse,HttpResponseRedirect,render
 from django.template import Context
 from django.template.loader import get_template
 from webmonitor.models import Hostinfo
@@ -14,6 +16,9 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from config import *
 from wsgiref.util import FileWrapper
 import mimetypes
+import django
+
+
 """
 =输出404内容
 """
@@ -23,7 +28,12 @@ def head404(request):
 
 """
 =图表及查询显示页
+
 """
+
+
+
+@login_required(login_url="/login/")
 def index(request):
     #获取应用清单
     Hostinfoobj = Hostinfo.objects.order_by('AppName')
@@ -49,14 +59,15 @@ def index(request):
             except Exception,e:
                 InfoList=['系统提示：','图型绘制失败，原因('+str(e)+')','/webmonitor/']
                 return render_to_response('webmonitor/info.html',{'DisplayInfo':InfoList })
-        return render_to_response('webmonitor/main.html',{'Hostinfoobj': Hostinfoobj,'Hostinforow':Hostinforow,'StartTime':StartTime,'EndTime':EndTime,'UserFind':UserFind,'system_name': settings.SYSTEM_NAME})
+        return render_to_response('main.html',{'Hostinfoobj': Hostinfoobj,'Hostinforow':Hostinforow,'StartTime':StartTime,'EndTime':EndTime,'UserFind':UserFind,'system_name': settings.SYSTEM_NAME})
     else:
-        return render_to_response('webmonitor/main.html',{'Hostinfoobj': Hostinfoobj,'system_name': settings.SYSTEM_NAME})
+        return render_to_response('main.html',{'Hostinfoobj': Hostinfoobj,'system_name': settings.SYSTEM_NAME})
 
 
 """
 =监控列表
 """
+@login_required(login_url="/login/")
 def monitorlist(request):
     #获取应用清单
     if  request.method == 'GET'  and 'AppId' in request.GET and 'StartTime' in request.GET and 'EndTime' in request.GET:
@@ -79,23 +90,25 @@ def monitorlist(request):
             contacts = paginator.page(page)
         except (EmptyPage, InvalidPage):
             contacts = paginator.page(paginator.num_pages)
-        return render_to_response('webmonitor/monitorlist.html',{'contacts': contacts,'ID':ID,'StartTime':StartTime,'EndTime':EndTime})
+        return render_to_response('monitorlist.html',{'contacts': contacts,'ID':ID,'StartTime':StartTime,'EndTime':EndTime})
     else:
-        return render_to_response('webmonitor/monitorlist.html',{})
+        return render_to_response('monitorlist.html',{})
 
 """
 =添加应用页面
 """
+@login_required(login_url="/login/")
 def add(request):
     idc_str=""
     for (k,v) in  settings.IDC.items(): 
         idc_str+="<label for=\""+k+"\"><input name=\"idc\" type=\"checkbox\" value=\""+k+"\" id=\""+k+"\">"+v+"</label>\n"
     res_template_dist={'system_name': settings.SYSTEM_NAME,'IDC':idc_str}
-    return render_to_response('webmonitor/HostAdd.html',res_template_dist)
+    return render_to_response('HostAdd.html',res_template_dist)
     
 """
 =应该添加方法
 """
+@login_required(login_url="/login/")
 def adddo(request):
     if request.method == 'GET':
 
@@ -157,7 +170,7 @@ def adddo(request):
             return HttpResponse("目录RRD文件失败！"+str(e))
         
         InfoList=['系统提示：','祝贺你，应用添加成功！请返回。','/webmonitor/add/']
-        return render_to_response('webmonitor/info.html',{'DisplayInfo':InfoList })
+        return render_to_response('info.html',{'DisplayInfo':InfoList })
         
     else:
         return HttpResponse("非法提交！")

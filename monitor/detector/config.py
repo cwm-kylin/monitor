@@ -16,7 +16,15 @@ CONNECTTIMEOUT = 5
 TIMEOUT = 10
 
 #告警邮件地址
-MAILTO="*****@qq.com"               ##填写邮件地址
+MAILTO="*******@"
 
 #告警手机号
-MOBILETO="18*******"                ##填写手机号
+MOBILETO="18511****"
+
+
+#微信报警接口参数配置
+#企业号id
+CorpId="wx811b9***************"
+
+#安全标示
+Secret="DIG0IYF5iyJEe0K6jIM-oIkQny*****"

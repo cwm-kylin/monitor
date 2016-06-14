@@ -84,7 +84,7 @@ function CheckSearchForm()
 			return;
 		}
 	}
-	document.SearchForm.action="/webmonitor/";
+	document.SearchForm.action="/";
 	document.SearchForm.submit();
 }
 
@@ -98,7 +98,7 @@ function CheckReportForm()
 			return;
 		}
 	}
-	document.SearchForm.action="/webmonitor/report";
+	document.SearchForm.action="/report";
 	document.SearchForm.submit();
 }
 

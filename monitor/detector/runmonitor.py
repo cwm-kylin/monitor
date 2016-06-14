@@ -8,6 +8,8 @@ import MySQLdb
 from  config import *
 import logging
 from decimal import Decimal
+import weixin
+
 
 
 class Runmonitor():
@@ -62,8 +64,56 @@ class Runmonitor():
     def Alarm(self,notificationtype,target,content):
         try:
             import urllib
-            InterfaceURL="http://Alarms.domain.com/sendmail/"+notificationtype+"/"+target+"/"+content
-            _GetResult=urllib.urlopen(InterfaceURL)
+            #InterfaceURL="http://Alarms.domain.com/sendmail/"+notificationtype+"/"+target+"/"+content
+            #print "InterfaceURL is: ",InterfaceURL
+            #_GetResult=urllib.urlopen(InterfaceURL)
+
+            if notificationtype=="email":
+                import smtplib
+                from email.mime.text import MIMEText
+                from email.header import Header
+
+                sender = 'kylin@wanxue.cn'
+                receiver = target
+
+
+
+                subject = '告警通知：'+content
+                smtpserver = 'mail.wanxue.cn'
+                username = 'kylin'
+                password = 'wx1212psd'
+
+
+                #中文需参数‘utf-8'，单字节字符不需要
+                msg = MIMEText(content,'text','utf-8')
+                msg['Subject'] = Header(subject, 'utf-8')
+
+                smtp = smtplib.SMTP()
+                smtp.connect('mail.wanxue.cn')
+                smtp.login(username, password)
+                smtp.sendmail(sender, receiver, msg.as_string())
+                smtp.quit()
+            elif notificationtype=="mobile":
+                ##微信报警
+                print 'notificationtype IS ====>:',notificationtype
+                print "aleart content is :",content
+                if content:
+                    with open(r'./wx_msg.txt','ab') as f:
+                        ####定义时间转换格式
+                        tran_time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+                        print tran_time
+                        f.write(content+'\r\n')
+                ##获取生成token
+                weixin.generate_token()
+                print"+++1"
+                ##群发消息
+                weixin.test_txt()
+                print"+++2"
+                ##发完后消息，清空消息。
+                with open(r'./wx_msg.txt','w') as f:
+                        f.write('\r\n')
+
+
         except Exception,e:
             logging.debug('Alarm error!'+str(e))
 
@@ -75,6 +125,7 @@ class Runmonitor():
     
     def runhost(self):
         for _hostlist in self.HOST:
+            print "=======_hostlist is =======>>>>>>>",_hostlist
             self.FID = int(_hostlist[0])
             self.DATETIME=int(str(time.time()).split('.')[0])
             if _hostlist[3]=="mobile":
@@ -94,12 +145,13 @@ class Runmonitor():
                 #请求超时时间
                 Curlobj.setopt(Curlobj.TIMEOUT, TIMEOUT)
                 Curlobj.setopt(Curlobj.NOPROGRESS, 0)
-                Curlobj.setopt(Curlobj.FOLLOWLOCATION, 1)
-                Curlobj.setopt(Curlobj.MAXREDIRS, 5)
+                Curlobj.setopt(Curlobj.FOLLOWLOCATION, 1)#设置写的回调，所有输出都定向到bodyfile中
+                Curlobj.setopt(Curlobj.MAXREDIRS, 5)#重定向次数
                 Curlobj.setopt(Curlobj.OPT_FILETIME, 1)
                 Curlobj.setopt(Curlobj.NOPROGRESS, 1)
+                Curlobj.setopt(pycurl.USERAGENT,"Mozilla/5.0")#设置代理浏览器
                 bodyfile = open(os.path.dirname(os.path.realpath(__file__))+"/_body", "wb")
-                Curlobj.setopt(Curlobj.WRITEDATA, bodyfile)
+                Curlobj.setopt(Curlobj.WRITEDATA, bodyfile)#输出文件保存到_body里面
                 Curlobj.perform()
                 bodyfile.close()
 
@@ -117,17 +169,21 @@ class Runmonitor():
 
                 if str(_hostlist[4])!="200":
                     returncontent=''.join(open(os.path.dirname(os.path.realpath(__file__))+'/_body', 'rb').readline().split())
+
                     if _hostlist[4]!=returncontent:
                         #返回串不一致
                         self.HTTP_CODE="000"
-                        self.Alarm('1',_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用返回串与设定值不一致")
                         #报警
-                        #pass
+                        ####生成content报警内容
+                        self.Alarm(_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用返回串与设定值不一致")
+
                 elif str(_hostlist[4])=="200" and str(self.HTTP_CODE)!="200":
                     #返回 http status为非200
-                    self.Alarm('1',_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用返回非200状态("+str(self.HTTP_CODE)+")")
                     #报警
-                    #pass
+                    ####生成content报警内容
+                    self.Alarm(_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用返回非200状态("+str(self.HTTP_CODE)+")")
+
+
 
             except Exception,e:
                 self.NAMELOOKUP_TIME =  0.0
@@ -143,8 +199,10 @@ class Runmonitor():
                 self.SPEED_DOWNLOAD=0.0
                 self.MARK=0
                 logging.error('pycurl url reset:'+str(e))
-                self.Alarm(_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用超时或连接异常")
                 #报警
+                ####生成content报警内容
+                self.Alarm(_hostlist[3],_target,_contentheader+"探测["+_hostlist[5]+"]应用超时或连接异常")
+
                 pass
 
             self.RunResult=(self.FID,self.NAMELOOKUP_TIME,self.CONNECT_TIME,self.PRETRANSFER_TIME,self.STARTTRANSFER_TIME,self.TOTAL_TIME, \

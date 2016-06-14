@@ -62,13 +62,13 @@ background-color:#F2FAFF;
 	border: 1px solid #808080;
 }
 .top_bottom {
-	background-color: #1d1d1d;
+	background-color: #035499;
 	float: left;
 	width: 100%;
 	height: 130px;
 }
 .down_bottom {
-	background-color: #333333;
+	background-color: #035499;
 	float: left;
 	width: 100%;
 	height: 5px;
@@ -82,7 +82,7 @@ background-color:#F2FAFF;
 #sys_run_button {
 	border:0px;
 	color:#ffffff;
-	background-image: url(/static/images/120.gif);
+	background-image: url(/static/images/52.gif);
 	font-weight:bold;
 	font-size:15px;
 	height: 31px;

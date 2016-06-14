@@ -31,3 +31,19 @@
 2016-06-02 21:23:01,383 [ERROR] Get new database  error:(1146, "Table 'webservermonitor.webmonitor_monitordata' doesn't exist")
 2016-06-02 21:24:02,006 [ERROR] Get new database  error:(1146, "Table 'webservermonitor.webmonitor_monitordata' doesn't exist")
 2016-06-02 21:25:01,657 [ERROR] Get new database  error:(1146, "Table 'webservermonitor.webmonitor_monitordata' doesn't exist")
+2016-06-15 10:48:09,184 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:48:09,185 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:49:09,344 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:49:09,345 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:50:09,251 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:50:09,251 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:51:08,641 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:51:08,641 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:52:08,800 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:52:08,800 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:53:08,704 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:53:08,705 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:54:08,992 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:54:08,992 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
+2016-06-15 10:55:09,152 [ERROR] connect database error!(2003, "Can't connect to MySQL server on '180.76.153.58' (110)")
+2016-06-15 10:55:09,152 [ERROR] Get new database  error:UpdateRRD instance has no attribute 'cursor'
